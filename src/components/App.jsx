@@ -4,23 +4,20 @@ import ContactList from 'components/ContactList';
 import Filter from 'components/Filter';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
+  const [contacts, setContacts] = useState(() => {
     const savedContacts = localStorage.getItem('contacts');
-
-    if (savedContacts) {
-      setContacts(JSON.parse(savedContacts));
-    }
-  }, []);
+    return savedContacts ? JSON.parse(savedContacts) : [];
+  });
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
   const addContact = (newContact) => {
-    const isNameExists = contacts.some((contact) => contact.name === newContact.name);
+    const isNameExists = contacts.some(
+      (contact) => contact.name.toLowerCase() === newContact.name.toLowerCase()
+    );
 
     if (isNameExists) {
       alert(`${newContact.name} is already in contacts.`);
@@ -45,7 +42,7 @@ export const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <ContactForm contacts={contacts} addContact={addContact} />
+      <ContactForm addContact={addContact} />
 
       <h2>Contacts</h2>
       <Filter filter={filter} onFilterChange={(value) => setFilter(value)} />

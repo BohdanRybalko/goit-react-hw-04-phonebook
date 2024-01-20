@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 
-const ContactForm = ({ contacts, addContact }) => {
+const ContactForm = ({ addContact }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const isNameExists = contacts.some((contact) => contact.name === name);
-
-    if (isNameExists) {
-      alert(`${name} is already in contacts.`);
-      return;
-    }
 
     addContact({ id: nanoid(), name, number });
     setName('');
